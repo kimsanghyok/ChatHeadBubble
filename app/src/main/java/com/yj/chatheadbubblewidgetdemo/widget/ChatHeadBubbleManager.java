@@ -1,6 +1,7 @@
 package com.yj.chatheadbubblewidgetdemo.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 
@@ -27,6 +28,7 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
     private LayoutInflater m_inflater;
     private BubbleWidget m_bubbleWidget;
     private ChatDialogWidget m_chatDialogWidget;
+    private boolean m_bBubbleViewVisible = false;
     private boolean m_bChatDialogVisible = false;
     private UserInfo m_peerUser = null;
     private ArrayList<MessageInfo> m_lstMessages = new ArrayList<>();
@@ -63,7 +65,10 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
 
     @Override
     public void onMessageSend(UserInfo p_peerUser, String p_strMessage) {
-        Utils.showNIToast(m_context);
+        Intent w_i = new Intent(ChatHeadBubbleService.MSG_MESSAGE_SEND);
+        w_i.putExtra("peer_user", p_peerUser);
+        w_i.putExtra("message", p_strMessage);
+        m_context.sendBroadcast(w_i);
     }
 
     @Override
@@ -78,6 +83,11 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
     +-----------------------------------------------------------------------------------------------  */
 
     public void setNewMessage(UserInfo p_peerUser, String p_strMessage) {
+        if (!m_bBubbleViewVisible) {
+            m_bBubbleViewVisible = true;
+            m_bubbleWidget.show(m_bBubbleViewVisible);
+        }
+
         boolean w_bClearUnread;
         if (m_peerUser == null) {
             w_bClearUnread = true;
@@ -98,11 +108,12 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
     private void initialize() {
         initImageLoader();
         initIconify();
+        m_bubbleWidget.show(false);
     }
 
     private void initImageLoader() {
         ImageLoaderConfiguration.Builder w_builder = new ImageLoaderConfiguration.Builder(m_context);
-		w_builder.threadPriority(Thread.NORM_PRIORITY - 2);
+		w_builder.threadPriority(Thread.MAX_PRIORITY);
 		w_builder.denyCacheImageMultipleSizesInMemory();
 		w_builder.diskCacheFileNameGenerator(new Md5FileNameGenerator());
 		w_builder.diskCacheSize(50 * 1024 * 1024); // 50 MiB

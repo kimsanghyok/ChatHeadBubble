@@ -64,6 +64,9 @@ public class BubbleWidget {
     private View m_vwRemove;
     private ImageView m_ivRemove;
 
+    private WindowManager.LayoutParams m_lpBubbleView;
+    private WindowManager.LayoutParams m_lpLastMessage;
+
 
 /*  +-----------------------------------------------------------------------------------------------
     | Overrides
@@ -86,6 +89,16 @@ public class BubbleWidget {
 /*  +-----------------------------------------------------------------------------------------------
     | Methods
     +-----------------------------------------------------------------------------------------------  */
+
+    public void show(boolean p_bShow) {
+        if (p_bShow) {
+            m_windowManager.addView(m_vwBubbleLayout, m_lpBubbleView);
+            m_windowManager.addView(m_llLastMessage, m_lpLastMessage);
+        } else {
+            m_windowManager.removeView(m_vwBubbleLayout);
+            m_windowManager.removeView(m_llLastMessage);
+        }
+    }
 
     public void setNewUserMessage(UserInfo p_peerUser, MessageInfo p_message, boolean p_bClearUnreadCnt) {
         if (p_bClearUnreadCnt)
@@ -110,18 +123,18 @@ public class BubbleWidget {
 
     private void initUI() {
         m_vwBubbleLayout = m_inflater.inflate(R.layout.bubble_widget_view, null);
-        WindowManager.LayoutParams w_lpBubbleWidget = new WindowManager.LayoutParams(
+        m_lpBubbleView = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
-        w_lpBubbleWidget.gravity = Gravity.TOP | Gravity.LEFT;
+        m_lpBubbleView.gravity = Gravity.TOP | Gravity.LEFT;
         m_vwBubbleLayout.setVisibility(View.VISIBLE);
         m_ivUserImage = (RoundedImageView) m_vwBubbleLayout.findViewById(R.id.iv_user_image);
         m_txtName = (TextView) m_vwBubbleLayout.findViewById(R.id.txt_name);
         m_txtUnreadCnt = (TextView) m_vwBubbleLayout.findViewById(R.id.txt_unread_cnt);
-        m_windowManager.addView(m_vwBubbleLayout, w_lpBubbleWidget);
+        m_windowManager.addView(m_vwBubbleLayout, m_lpBubbleView);
 
         m_vwRemove = m_inflater.inflate(R.layout.remove_view, null);
         WindowManager.LayoutParams w_lpRemoveView = new WindowManager.LayoutParams(
@@ -133,20 +146,20 @@ public class BubbleWidget {
         w_lpRemoveView.gravity = Gravity.TOP | Gravity.LEFT;
         m_vwRemove.setVisibility(View.GONE);
         m_ivRemove = (ImageView) m_vwRemove.findViewById(R.id.remove_img);
-        m_windowManager.addView(m_vwRemove, w_lpRemoveView);
+        //m_windowManager.addView(m_vwRemove, w_lpRemoveView);
 
         m_llLastMessage = (LinearLayout) m_inflater.inflate(R.layout.bubble_text_view, null);
         m_txtTime = (TextView) m_llLastMessage.findViewById(R.id.txt_time);
         m_txtLastMessage = (TextView) m_llLastMessage.findViewById(R.id.txt_last_message);
-        WindowManager.LayoutParams w_lpLastMessage = new WindowManager.LayoutParams(
+        m_lpLastMessage = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
-        w_lpLastMessage.gravity = Gravity.TOP | Gravity.LEFT;
+        m_lpLastMessage.gravity = Gravity.TOP | Gravity.LEFT;
         m_llLastMessage.setVisibility(View.GONE);
-        m_windowManager.addView(m_llLastMessage, w_lpLastMessage);
+        m_windowManager.addView(m_llLastMessage, m_lpLastMessage);
         
         initTouch();
         refreshUI();
@@ -312,6 +325,7 @@ public class BubbleWidget {
 
     private void refreshUI() {
         if (m_peerUser != null) {
+            m_ivUserImage.setImageResource(R.drawable.unknown_user);
             ImageLoader.getInstance().displayImage(m_peerUser.image_url, m_ivUserImage);
             m_txtName.setVisibility(View.VISIBLE);
             m_txtName.setText(m_peerUser.name);
@@ -332,6 +346,9 @@ public class BubbleWidget {
         WindowManager.LayoutParams param_chathead = (WindowManager.LayoutParams) m_vwBubbleLayout.getLayoutParams();
         WindowManager.LayoutParams param_txt = (WindowManager.LayoutParams) m_llLastMessage.getLayoutParams();
 
+        if (m_llLastMessage.getLayoutParams() == null) {
+            return;
+        }
         m_llLastMessage.getLayoutParams().height = ActionBar.LayoutParams.WRAP_CONTENT;//m_vwBubbleLayout.getHeight();
         m_llLastMessage.getLayoutParams().width = ActionBar.LayoutParams.WRAP_CONTENT;
 

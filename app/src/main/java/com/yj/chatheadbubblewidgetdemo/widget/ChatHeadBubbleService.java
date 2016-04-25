@@ -1,7 +1,10 @@
 package com.yj.chatheadbubblewidgetdemo.widget;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -19,7 +22,24 @@ public class ChatHeadBubbleService extends Service {
     | Data members
     +-----------------------------------------------------------------------------------------------  */
 
+    public static final String MSG_MESSAGE_RECV = "msg_message_recv";    // called from front-end.
+    public static final String MSG_MESSAGE_SEND = "msg_message_send";    // call to front-end.
+
     private ChatHeadBubbleManager m_manager = null;
+    private BroadcastReceiver m_brMessage = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().toString().equals(MSG_MESSAGE_RECV)) {
+                UserInfo w_peerUser = (UserInfo) intent.getSerializableExtra("peer_user");
+                String w_strMessage = intent.getStringExtra("message");
+                if (w_peerUser != null && w_strMessage != null && !w_strMessage.isEmpty()) {
+                    if (m_manager != null) {
+                        m_manager.setNewMessage(w_peerUser, w_strMessage);
+                    }
+                }
+            }
+        }
+    };
 
 
     @SuppressWarnings("deprecation")
@@ -31,6 +51,7 @@ public class ChatHeadBubbleService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(Utils.LogTag, "ChatHeadBubbleService.onCreate()");
+        registerReceiver(m_brMessage, new IntentFilter(MSG_MESSAGE_RECV));
     }
 
     @Override
@@ -65,13 +86,14 @@ public class ChatHeadBubbleService extends Service {
 
         if (m_manager == null) {
             m_manager = new ChatHeadBubbleManager(this);
-            test();
+            //test();
         }
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
+        unregisterReceiver(m_brMessage);
         m_manager.uninitialize();
         super.onDestroy();
     }
