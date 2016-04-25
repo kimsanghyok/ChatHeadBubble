@@ -9,4 +9,10 @@ public class MessageInfo {
     public String message;
     public Date time;
     public boolean isRecv;  // true: Peer user's message, false: My message.
+
+    public MessageInfo(String p_strMessage, boolean p_isRecv) {
+        message = p_strMessage;
+        time = new Date();
+        isRecv = p_isRecv;
+    }
 }

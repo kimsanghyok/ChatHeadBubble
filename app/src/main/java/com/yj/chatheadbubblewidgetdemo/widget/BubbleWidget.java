@@ -1,7 +1,7 @@
 package com.yj.chatheadbubblewidgetdemo.widget;
 
+import android.app.ActionBar;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
@@ -17,9 +17,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yj.chatheadbubblewidgetdemo.R;
 import com.yj.chatheadbubblewidgetdemo.Utils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by toltori on 4/25/16.
@@ -33,6 +37,7 @@ public class BubbleWidget {
     private BubbleEventListener m_eventListener;
     private UserInfo m_peerUser = null;
     private String m_strLastMessage = "";
+    private String m_strTime = "Just";
     private int m_nUnreadCnt = 0;
 
     private int x_init_cord, y_init_cord, x_init_margin, y_init_margin; // For touch event handling.
@@ -49,11 +54,12 @@ public class BubbleWidget {
     private LayoutInflater m_inflater;
 
     private View m_vwBubbleLayout;
-    private ImageView m_ivUserImage;
+    private RoundedImageView m_ivUserImage;
     private TextView m_txtName;
     private TextView m_txtUnreadCnt;
 
-    private LinearLayout m_llBubbleText;
+    private LinearLayout m_llLastMessage;
+    private TextView m_txtTime;
     private TextView m_txtLastMessage;
 
     private View m_vwRemove;
@@ -88,6 +94,8 @@ public class BubbleWidget {
             m_nUnreadCnt = 0;
         m_peerUser = p_peerUser;
         m_strLastMessage = p_message.message;
+        SimpleDateFormat w_sdf = new SimpleDateFormat("M/d k:m a");
+        m_strTime = w_sdf.format(new Date());
         m_nUnreadCnt++;
         refreshUI();
     }
@@ -112,7 +120,7 @@ public class BubbleWidget {
                 PixelFormat.TRANSLUCENT);
         w_lpBubbleWidget.gravity = Gravity.TOP | Gravity.LEFT;
         m_vwBubbleLayout.setVisibility(View.VISIBLE);
-        m_ivUserImage = (ImageView) m_vwBubbleLayout.findViewById(R.id.iv_user_image);
+        m_ivUserImage = (RoundedImageView) m_vwBubbleLayout.findViewById(R.id.iv_user_image);
         m_txtName = (TextView) m_vwBubbleLayout.findViewById(R.id.txt_name);
         m_txtUnreadCnt = (TextView) m_vwBubbleLayout.findViewById(R.id.txt_unread_cnt);
         m_windowManager.addView(m_vwBubbleLayout, w_lpBubbleWidget);
@@ -129,18 +137,18 @@ public class BubbleWidget {
         m_ivRemove = (ImageView) m_vwRemove.findViewById(R.id.remove_img);
         m_windowManager.addView(m_vwRemove, w_lpRemoveView);
 
-        m_llBubbleText = (LinearLayout) m_inflater.inflate(R.layout.bubble_text_view, null);
-        m_txtLastMessage = (TextView) m_llBubbleText.findViewById(R.id.txt_last_message);
-
-        WindowManager.LayoutParams paramsTxt = new WindowManager.LayoutParams(
+        m_llLastMessage = (LinearLayout) m_inflater.inflate(R.layout.bubble_text_view, null);
+        m_txtTime = (TextView) m_llLastMessage.findViewById(R.id.txt_time);
+        m_txtLastMessage = (TextView) m_llLastMessage.findViewById(R.id.txt_last_message);
+        WindowManager.LayoutParams w_lpLastMessage = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 PixelFormat.TRANSLUCENT);
-        paramsTxt.gravity = Gravity.TOP | Gravity.LEFT;
-        m_llBubbleText.setVisibility(View.GONE);
-        m_windowManager.addView(m_llBubbleText, paramsTxt);
+        w_lpLastMessage.gravity = Gravity.TOP | Gravity.LEFT;
+        m_llLastMessage.setVisibility(View.GONE);
+        m_windowManager.addView(m_llLastMessage, w_lpLastMessage);
         
         initTouch();
         refreshUI();
@@ -252,6 +260,7 @@ public class BubbleWidget {
                         layoutParams.y = y_cord_Destination;
 
                         m_windowManager.updateViewLayout(m_vwBubbleLayout, layoutParams);
+                        showMsg();
                         break;
                     case MotionEvent.ACTION_UP:
                         isLongclick = false;
@@ -317,28 +326,32 @@ public class BubbleWidget {
 
     private void showMsg(){
         Log.d(Utils.LogTag, "ChatHeadService.showMsg -> m_strLastMessage=" + m_strLastMessage);
+        m_txtTime.setText(m_strTime);
         m_txtLastMessage.setText(m_strLastMessage);
 
         WindowManager.LayoutParams param_chathead = (WindowManager.LayoutParams) m_vwBubbleLayout.getLayoutParams();
-        WindowManager.LayoutParams param_txt = (WindowManager.LayoutParams) m_llBubbleText.getLayoutParams();
+        WindowManager.LayoutParams param_txt = (WindowManager.LayoutParams) m_llLastMessage.getLayoutParams();
 
-        m_llBubbleText.getLayoutParams().height = m_vwBubbleLayout.getHeight();
-        m_llBubbleText.getLayoutParams().width = szWindow.x / 2;
+        m_llLastMessage.getLayoutParams().height = ActionBar.LayoutParams.WRAP_CONTENT;//m_vwBubbleLayout.getHeight();
+        m_llLastMessage.getLayoutParams().width = ActionBar.LayoutParams.WRAP_CONTENT;
 
+        int w_fHorizontalGap = 10;
         if(isLeft){
-            param_txt.x = param_chathead.x + m_ivUserImage.getWidth();
+            param_txt.x = param_chathead.x + w_fHorizontalGap + m_ivUserImage.getWidth();
             param_txt.y = param_chathead.y;
 
-            m_llBubbleText.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            m_llLastMessage.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            m_llLastMessage.setBackgroundResource(R.drawable.chatting_left_bg);
         }else{
-            param_txt.x = param_chathead.x - szWindow.x / 2;
+            param_txt.x = param_chathead.x - w_fHorizontalGap - (m_llLastMessage.getWidth() > 1.0f ? m_llLastMessage.getWidth() : szWindow.x / 2);
             param_txt.y = param_chathead.y;
 
-            m_llBubbleText.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+            m_llLastMessage.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+            m_llLastMessage.setBackgroundResource(R.drawable.chatting_right_bg);
         }
 
-        m_llBubbleText.setVisibility(View.VISIBLE);
-        m_windowManager.updateViewLayout(m_llBubbleText, param_txt);
+        m_llLastMessage.setVisibility(View.VISIBLE);
+        m_windowManager.updateViewLayout(m_llLastMessage, param_txt);
     }
 
     private void resetPosition(int x_cord_now) {
@@ -361,11 +374,13 @@ public class BubbleWidget {
                 long step = (500 - t) / 5;
                 mParams.x = 0 - (int) (double) bounceValue(step, x);
                 m_windowManager.updateViewLayout(m_vwBubbleLayout, mParams);
+                showMsg();
             }
 
             public void onFinish() {
                 mParams.x = 0;
                 m_windowManager.updateViewLayout(m_vwBubbleLayout, mParams);
+                showMsg();
             }
         }.start();
     }
@@ -378,11 +393,13 @@ public class BubbleWidget {
                 long step = (500 - t) / 5;
                 mParams.x = szWindow.x + (int) (double) bounceValue(step, x_cord_now) - m_vwBubbleLayout.getWidth();
                 m_windowManager.updateViewLayout(m_vwBubbleLayout, mParams);
+                showMsg();
             }
 
             public void onFinish() {
                 mParams.x = szWindow.x - m_vwBubbleLayout.getWidth();
                 m_windowManager.updateViewLayout(m_vwBubbleLayout, mParams);
+                showMsg();
             }
         }.start();
     }

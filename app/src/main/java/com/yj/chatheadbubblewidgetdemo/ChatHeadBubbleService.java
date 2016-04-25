@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.yj.chatheadbubblewidgetdemo.widget.ChatHeadBubbleManager;
+import com.yj.chatheadbubblewidgetdemo.widget.UserInfo;
 
 /**
  * Created by toltori on 4/25/16.
@@ -65,6 +66,7 @@ public class ChatHeadBubbleService extends Service {
         if(startId == Service.START_STICKY) {
             if (m_manager == null) {
                 m_manager = new ChatHeadBubbleManager(this);
+                test();
             }
             return super.onStartCommand(intent, flags, startId);
         }else{
@@ -83,5 +85,19 @@ public class ChatHeadBubbleService extends Service {
     public IBinder onBind(Intent intent) {
         Log.d(Utils.LogTag, "ChatHeadBubbleService.onBind()");
         return null;
+    }
+
+    public void test() {
+        final UserInfo w_userInfo = new UserInfo();
+        w_userInfo.id = 1;
+        w_userInfo.name = "Arda Khan";
+        w_userInfo.image_url = "http://i.telegraph.co.uk/multimedia/archive/03249/archetypal-male-fa_3249635c.jpg";
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                m_manager.setNewMessage(w_userInfo, "Hello Joe!\nGood morning?\nHow you today?");
+                m_manager.setNewMessage(w_userInfo, "Today is busy day, isn't it?");
+            }
+        });
     }
 }

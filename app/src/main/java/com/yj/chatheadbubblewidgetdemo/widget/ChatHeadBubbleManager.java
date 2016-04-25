@@ -33,8 +33,8 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
     private LayoutInflater m_inflater;
     private BubbleWidget m_bubbleWidget;
     private ChatDialogWidget m_chatDialogWidget;
-    private UserInfo m_peerUser;
-    private ArrayList<MessageInfo> m_lstMessages;
+    private UserInfo m_peerUser = null;
+    private ArrayList<MessageInfo> m_lstMessages = new ArrayList<>();
 
 /*  +-----------------------------------------------------------------------------------------------
     | Overrides
@@ -75,7 +75,17 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
     +-----------------------------------------------------------------------------------------------  */
 
     public void setNewMessage(UserInfo p_peerUser, String p_strMessage) {
+        boolean w_bClearUnread;
+        if (m_peerUser == null) {
+            w_bClearUnread = true;
+        } else {
+            w_bClearUnread = m_peerUser.id != p_peerUser.id;
+        }
+        m_peerUser = p_peerUser;
+        MessageInfo w_newMessage = new MessageInfo(p_strMessage, true);
+        m_lstMessages.add(w_newMessage);
 
+        m_bubbleWidget.setNewUserMessage(m_peerUser, w_newMessage, w_bClearUnread);
     }
 
     private void initialize() {
