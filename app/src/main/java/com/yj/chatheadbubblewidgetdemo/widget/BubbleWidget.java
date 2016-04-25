@@ -325,7 +325,6 @@ public class BubbleWidget {
 
     private void refreshUI() {
         if (m_peerUser != null) {
-            m_ivUserImage.setImageResource(R.drawable.unknown_user);
             ImageLoader.getInstance().displayImage(m_peerUser.image_url, m_ivUserImage);
             m_txtName.setVisibility(View.VISIBLE);
             m_txtName.setText(m_peerUser.name);
