@@ -35,10 +35,11 @@ public class ChatHeadBubbleService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(Utils.LogTag, "ChatHeadBubbleService.onStartCommand() -> startId=" + startId);
+    public int onStartCommand(Intent p_intent, int p_nFlags, int p_nServiceId) {
+        Log.d(Utils.LogTag, "ChatHeadBubbleService.onStartCommand() -> startId=" + p_nServiceId);
+        super.onStartCommand(p_intent, p_nFlags, p_nServiceId);
 
-        if(intent != null){
+        if(p_intent != null){
 //            Bundle bd = intent.getExtras();
 
 //            if(bd != null)
@@ -63,15 +64,11 @@ public class ChatHeadBubbleService extends Service {
 
         }
 
-        if(startId == Service.START_STICKY) {
-            if (m_manager == null) {
-                m_manager = new ChatHeadBubbleManager(this);
-                test();
-            }
-            return super.onStartCommand(intent, flags, startId);
-        }else{
-            return  Service.START_NOT_STICKY;
+        if (m_manager == null) {
+            m_manager = new ChatHeadBubbleManager(this);
+            test();
         }
+        return START_STICKY;
     }
 
     @Override

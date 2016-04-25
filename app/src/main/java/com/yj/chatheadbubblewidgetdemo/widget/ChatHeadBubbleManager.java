@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -15,6 +17,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.yj.chatheadbubblewidgetdemo.R;
+import com.yj.chatheadbubblewidgetdemo.Utils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -33,6 +36,7 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
     private LayoutInflater m_inflater;
     private BubbleWidget m_bubbleWidget;
     private ChatDialogWidget m_chatDialogWidget;
+    private boolean m_bChatDialogVisible = false;
     private UserInfo m_peerUser = null;
     private ArrayList<MessageInfo> m_lstMessages = new ArrayList<>();
 
@@ -45,28 +49,36 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
         m_windowManager = (WindowManager) m_context.getSystemService(Context.WINDOW_SERVICE);
         m_inflater = (LayoutInflater) m_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         m_bubbleWidget = new BubbleWidget(m_context, m_windowManager, m_inflater, this);
+        m_chatDialogWidget = new ChatDialogWidget(m_context, m_windowManager, m_inflater, this);
 
         initialize();
     }
 
     @Override
     public void onBubbleClick() {
+        m_bChatDialogVisible = !m_bChatDialogVisible;
 
+        if (m_bChatDialogVisible) {
+            m_chatDialogWidget.setPeerUser(m_peerUser);
+            m_chatDialogWidget.setMessages(m_lstMessages);
+        }
+        m_chatDialogWidget.show(m_bChatDialogVisible);
     }
 
     @Override
     public void onBubbleClose() {
-
+        Utils.showNIToast(m_context);
     }
 
     @Override
     public void onMessageSend(UserInfo p_peerUser, String p_strMessage) {
-
+        Utils.showNIToast(m_context);
     }
 
     @Override
     public void onChatDialogClose() {
-
+        m_chatDialogWidget.show(false);
+        m_bChatDialogVisible = false;
     }
 
 
@@ -83,13 +95,18 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
         }
         m_peerUser = p_peerUser;
         MessageInfo w_newMessage = new MessageInfo(p_strMessage, true);
+        if (w_bClearUnread)
+            m_lstMessages.clear();
         m_lstMessages.add(w_newMessage);
 
         m_bubbleWidget.setNewUserMessage(m_peerUser, w_newMessage, w_bClearUnread);
+        if (m_bChatDialogVisible)
+            m_chatDialogWidget.refreshMessagesUI();
     }
 
     private void initialize() {
         initImageLoader();
+        initIconify();
     }
 
     private void initImageLoader() {
@@ -104,7 +121,13 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
         ImageLoader.getInstance().init(w_builder.build());
     }
 
+    private void initIconify() {
+        Iconify.with(new FontAwesomeModule());
+    }
+
     public void uninitialize() {
         m_bubbleWidget.uninitialize();
+        if (m_bChatDialogVisible)
+            m_chatDialogWidget.uninitialize();
     }
 }

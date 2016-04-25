@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/fl_message_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6.0dip"
+            android:layout_marginTop="6.0dip"
+            android:background="@drawable/chatting_target_bg"
+            android:paddingBottom="6.0dip"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="6.0dip"
+            android:paddingTop="6.0dip">
+
+            <TextView
+                android:id="@+id/chatting_target_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="안녕하세요~"
+                android:textColor="#ff4f4f4f"
+                android:textSize="14.0sp" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/chatting_target_regDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dip"
+            android:layout_marginLeft="10.0dip"
+            android:text="오후 1:29:52"
+            android:textColor="#ff4f4f4f"
+            android:textSize="10.0sp" />
+    </LinearLayout>
+</LinearLayout>

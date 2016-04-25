@@ -84,7 +84,6 @@ public class BubbleWidget {
 
 
 
-
 /*  +-----------------------------------------------------------------------------------------------
     | Methods
     +-----------------------------------------------------------------------------------------------  */
@@ -100,15 +99,15 @@ public class BubbleWidget {
         refreshUI();
     }
 
-
-/*  +-----------------------------------------------------------------------------------------------
-    | Helper functions
-    +-----------------------------------------------------------------------------------------------  */
-
     public void uninitialize() {
         m_windowManager.removeView(m_vwBubbleLayout);
         m_windowManager.removeView(m_vwRemove);
     }
+
+
+/*  +-----------------------------------------------------------------------------------------------
+    | Helper functions
+    +-----------------------------------------------------------------------------------------------  */
 
     private void initUI() {
         m_vwBubbleLayout = m_inflater.inflate(R.layout.bubble_widget_view, null);
@@ -175,9 +174,11 @@ public class BubbleWidget {
                 public void run() {
                     Log.d(Utils.LogTag, "Into runnable_longClick");
 
+                    /*
                     isLongclick = true;
                     m_vwRemove.setVisibility(View.VISIBLE);
                     chathead_longclick();
+                    */
                 }
             };
 
@@ -415,6 +416,9 @@ public class BubbleWidget {
     }
 
     private void chathead_click() {
+        m_nUnreadCnt = 0;
+        m_txtUnreadCnt.setText("");
+        m_txtUnreadCnt.setVisibility(View.INVISIBLE);
         if (m_eventListener != null) {
             m_eventListener.onBubbleClick();
         }
