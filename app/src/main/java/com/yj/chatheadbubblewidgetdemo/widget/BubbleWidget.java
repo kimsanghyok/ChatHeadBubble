@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yj.chatheadbubblewidgetdemo.R;
-import com.yj.chatheadbubblewidgetdemo.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

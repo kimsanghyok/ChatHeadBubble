@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ChatHeadBubbleService"></service>
+        <service android:name=".widget.ChatHeadBubbleService"></service>
     </application>
 
 </manifest>
