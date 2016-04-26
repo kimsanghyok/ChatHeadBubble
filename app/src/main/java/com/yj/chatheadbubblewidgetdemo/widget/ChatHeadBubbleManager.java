@@ -69,6 +69,8 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
         w_i.putExtra("peer_user", p_peerUser);
         w_i.putExtra("message", p_strMessage);
         m_context.sendBroadcast(w_i);
+
+        m_bubbleWidget.setMyMessage(p_strMessage);
     }
 
     @Override
@@ -100,7 +102,7 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
             m_lstMessages.clear();
         m_lstMessages.add(w_newMessage);
 
-        m_bubbleWidget.setNewUserMessage(m_peerUser, w_newMessage, w_bClearUnread);
+        m_bubbleWidget.setNewUserMessage(m_peerUser, w_newMessage, w_bClearUnread, !m_bChatDialogVisible);
         if (m_bChatDialogVisible)
             m_chatDialogWidget.refreshMessagesUI();
     }

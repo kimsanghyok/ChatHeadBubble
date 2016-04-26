@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
                     String w_strNewMessageInfo = "To " + w_peerUser.name + " : '" + w_strMessage + "'\n";
                     m_strMyMessages = m_strMyMessages + w_strNewMessageInfo;
                     m_txtMyMessages.setText(m_strMyMessages);
+
+                    sendMessage(m_person1, "that sounds great");
                 }
             }
         }
@@ -66,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
         initData();
         registerReceiver(m_brMessage, new IntentFilter(ChatHeadBubbleService.MSG_MESSAGE_SEND));
         startService(new Intent(this, ChatHeadBubbleService.class));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sendMessage(m_person1, "hello, how are you?");
+            }
+        }, 6000);
     }
 
     @Override
@@ -85,11 +94,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        Intent w_i = new Intent(ChatHeadBubbleService.MSG_MESSAGE_RECV);
-        w_i.putExtra("peer_user", m_person1);
-        w_i.putExtra("message", m_txtMessage1.getText().toString());
-        sendBroadcast(w_i);
-
+        sendMessage(m_person1, m_txtMessage1.getText().toString());
         m_txtMessage1.setText("");
     }
 
@@ -99,11 +104,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        Intent w_i = new Intent(ChatHeadBubbleService.MSG_MESSAGE_RECV);
-        w_i.putExtra("peer_user", m_person2);
-        w_i.putExtra("message", m_txtMessage2.getText().toString());
-        sendBroadcast(w_i);
-
+        sendMessage(m_person2, m_txtMessage2.getText().toString());
         m_txtMessage2.setText("");
     }
 
@@ -134,5 +135,12 @@ public class MainActivity extends AppCompatActivity {
         m_person2.id = 2;
         m_person2.name = "James Rodrigez";
         m_person2.image_url = "http://cfile5.uf.tistory.com/image/26545B4653AF40B52857E6";
+    }
+
+    private void sendMessage(UserInfo p_peerUser, String p_strMessage) {
+        Intent w_i = new Intent(ChatHeadBubbleService.MSG_MESSAGE_RECV);
+        w_i.putExtra("peer_user", p_peerUser);
+        w_i.putExtra("message", p_strMessage);
+        sendBroadcast(w_i);
     }
 }

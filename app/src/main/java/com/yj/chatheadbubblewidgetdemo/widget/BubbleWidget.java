@@ -100,14 +100,23 @@ public class BubbleWidget {
         }
     }
 
-    public void setNewUserMessage(UserInfo p_peerUser, MessageInfo p_message, boolean p_bClearUnreadCnt) {
+    public void setMyMessage(String p_strMyMessage) {
+        m_strLastMessage = "Me: " + p_strMyMessage;
+        SimpleDateFormat w_sdf = new SimpleDateFormat("M/d k:m a");
+        m_strTime = w_sdf.format(new Date());
+        refreshUI();
+    }
+
+    public void setNewUserMessage(UserInfo p_peerUser, MessageInfo p_message, boolean p_bClearUnreadCnt, boolean p_bIncreaseUnreadCnt) {
         if (p_bClearUnreadCnt)
             m_nUnreadCnt = 0;
         m_peerUser = p_peerUser;
         m_strLastMessage = p_message.message;
         SimpleDateFormat w_sdf = new SimpleDateFormat("M/d k:m a");
         m_strTime = w_sdf.format(new Date());
-        m_nUnreadCnt++;
+
+        if (p_bIncreaseUnreadCnt)
+            m_nUnreadCnt++;
         refreshUI();
     }
 

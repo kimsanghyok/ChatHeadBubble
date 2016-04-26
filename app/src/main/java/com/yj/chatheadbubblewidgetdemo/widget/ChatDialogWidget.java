@@ -82,9 +82,7 @@ public class ChatDialogWidget {
     }
 
     public void setMessages(ArrayList<MessageInfo> p_lstMessages) {
-        m_lstMessages.clear();
-        if (p_lstMessages != null)
-            m_lstMessages.addAll(p_lstMessages);
+        m_lstMessages = p_lstMessages;
         initMessageItems();
         m_adapter.notifyDataSetChanged();
     }
