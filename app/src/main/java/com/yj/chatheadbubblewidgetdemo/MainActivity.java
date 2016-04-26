@@ -39,7 +39,13 @@ public class MainActivity extends AppCompatActivity {
                     m_strMyMessages = m_strMyMessages + w_strNewMessageInfo;
                     m_txtMyMessages.setText(m_strMyMessages);
 
-                    sendMessage(m_person1, "that sounds great");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendMessage(m_person1, "that sounds great");
+                        }
+                    }, 2000);
+
                 }
             }
         }

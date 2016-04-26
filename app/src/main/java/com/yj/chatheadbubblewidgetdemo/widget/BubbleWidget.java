@@ -350,6 +350,7 @@ public class BubbleWidget {
         Log.d(Utils.LogTag, "ChatHeadService.showMsg -> m_strLastMessage=" + m_strLastMessage);
         m_txtTime.setText(m_strTime);
         m_txtLastMessage.setText(m_strLastMessage);
+        m_llLastMessage.measure(0, 0);
 
         WindowManager.LayoutParams param_chathead = (WindowManager.LayoutParams) m_vwBubbleLayout.getLayoutParams();
         WindowManager.LayoutParams param_txt = (WindowManager.LayoutParams) m_llLastMessage.getLayoutParams();
@@ -368,7 +369,7 @@ public class BubbleWidget {
             m_llLastMessage.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             m_llLastMessage.setBackgroundResource(R.drawable.chatting_left_bg);
         }else{
-            param_txt.x = param_chathead.x - w_fHorizontalGap - (m_llLastMessage.getWidth() > 1.0f ? m_llLastMessage.getWidth() : szWindow.x / 2);
+            param_txt.x = param_chathead.x - w_fHorizontalGap - (m_llLastMessage.getMeasuredWidth() > 1.0f ? m_llLastMessage.getMeasuredWidth() : szWindow.x / 2);
             param_txt.y = param_chathead.y;
 
             m_llLastMessage.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
