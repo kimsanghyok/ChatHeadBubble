@@ -1,4 +1,4 @@
-package com.yj.chatheadbubblewidgetdemo.widget;
+package com.yj.chatheadbubblewidget.widget;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 
-import com.yj.chatheadbubblewidgetdemo.R;
+import com.yj.chatheadbubblewidget.R;
 
 import java.util.ArrayList;
 

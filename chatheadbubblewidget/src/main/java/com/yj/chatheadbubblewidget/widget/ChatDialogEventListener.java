@@ -1,4 +1,4 @@
-package com.yj.chatheadbubblewidgetdemo.widget;
+package com.yj.chatheadbubblewidget.widget;
 
 /**
  * Created by toltori on 4/25/16.

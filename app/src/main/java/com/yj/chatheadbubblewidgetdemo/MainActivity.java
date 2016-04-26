@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yj.chatheadbubblewidgetdemo.widget.ChatHeadBubbleService;
-import com.yj.chatheadbubblewidgetdemo.widget.UserInfo;
+import com.yj.chatheadbubblewidget.widget.ChatHeadBubbleService;
+import com.yj.chatheadbubblewidget.widget.UserInfo;
 
 public class MainActivity extends AppCompatActivity {
 

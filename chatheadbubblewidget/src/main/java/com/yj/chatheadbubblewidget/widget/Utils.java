@@ -1,11 +1,11 @@
-package com.yj.chatheadbubblewidgetdemo.widget;
+package com.yj.chatheadbubblewidget.widget;
 
 import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
 import android.widget.Toast;
 
-import com.yj.chatheadbubblewidgetdemo.R;
+import com.yj.chatheadbubblewidget.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -19,8 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service android:name=".widget.ChatHeadBubbleService"></service>
     </application>
 
 </manifest>

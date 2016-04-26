@@ -1,4 +1,4 @@
-package com.yj.chatheadbubblewidgetdemo.widget;
+package com.yj.chatheadbubblewidget.widget;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -8,10 +8,6 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-
-import com.yj.chatheadbubblewidgetdemo.widget.ChatHeadBubbleManager;
-import com.yj.chatheadbubblewidgetdemo.widget.UserInfo;
-import com.yj.chatheadbubblewidgetdemo.widget.Utils;
 
 /**
  * Created by toltori on 4/25/16.

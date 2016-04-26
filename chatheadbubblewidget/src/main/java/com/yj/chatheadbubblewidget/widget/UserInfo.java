@@ -1,4 +1,4 @@
-package com.yj.chatheadbubblewidgetdemo.widget;
+package com.yj.chatheadbubblewidget.widget;
 
 import android.os.Parcelable;
 

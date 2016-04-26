@@ -1,4 +1,4 @@
-package com.yj.chatheadbubblewidgetdemo.widget;
+package com.yj.chatheadbubblewidget.widget;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.joanzapata.iconify.widget.IconButton;
-import com.yj.chatheadbubblewidgetdemo.R;
+import com.yj.chatheadbubblewidget.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -1,4 +1,4 @@
-package com.yj.chatheadbubblewidgetdemo.widget;
+package com.yj.chatheadbubblewidget.widget;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.yj.chatheadbubblewidgetdemo.R;
+import com.yj.chatheadbubblewidget.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
