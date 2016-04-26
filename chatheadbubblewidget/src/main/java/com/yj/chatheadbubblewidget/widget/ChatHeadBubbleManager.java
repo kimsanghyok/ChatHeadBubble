@@ -60,7 +60,20 @@ public class ChatHeadBubbleManager implements BubbleEventListener, ChatDialogEve
 
     @Override
     public void onBubbleClose() {
-        Utils.showNIToast(m_context);
+        if (m_bBubbleViewVisible) {
+            m_bubbleWidget.show(false);
+            m_bBubbleViewVisible = false;
+        }
+        if (m_bChatDialogVisible) {
+            m_chatDialogWidget.show(false);
+            m_bChatDialogVisible = false;
+        }
+        m_peerUser = null;
+        m_lstMessages.clear();
+
+        m_bubbleWidget = new BubbleWidget(m_context, m_windowManager, m_inflater, this);
+        m_chatDialogWidget = new ChatDialogWidget(m_context, m_windowManager, m_inflater, this);
+        m_bubbleWidget.show(false);
     }
 
     @Override

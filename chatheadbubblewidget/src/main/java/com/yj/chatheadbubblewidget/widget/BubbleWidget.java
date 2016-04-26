@@ -155,7 +155,7 @@ public class BubbleWidget {
         w_lpRemoveView.gravity = Gravity.TOP | Gravity.LEFT;
         m_vwRemove.setVisibility(View.GONE);
         m_ivRemove = (ImageView) m_vwRemove.findViewById(R.id.remove_img);
-        //m_windowManager.addView(m_vwRemove, w_lpRemoveView);
+        m_windowManager.addView(m_vwRemove, w_lpRemoveView);
 
         m_llLastMessage = (LinearLayout) m_inflater.inflate(R.layout.bubble_text_view, null);
         m_txtTime = (TextView) m_llLastMessage.findViewById(R.id.txt_time);
@@ -195,11 +195,9 @@ public class BubbleWidget {
                 public void run() {
                     Log.d(Utils.LogTag, "Into runnable_longClick");
 
-                    /*
                     isLongclick = true;
                     m_vwRemove.setVisibility(View.VISIBLE);
                     chathead_longclick();
-                    */
                 }
             };
 
