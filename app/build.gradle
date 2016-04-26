@@ -8,12 +8,12 @@ android {
         applicationId "com.yj.chatheadbubblewidgetdemo"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 3
+        versionCode 5
         versionName "1.0"
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles 'proguard-rules.pro'
         }
     }
